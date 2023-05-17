@@ -1,9 +1,11 @@
 import { Component } from "react";
-import { Formik, Field, Form } from 'formik';
 import { ContactsForm } from "./ContactsForm/contactsForm";
+import ContactList from "./ContactsList/contactsList";
+import Filter from "./Filter/filter";
 
 export class App extends Component{
-      state = {
+
+state = {
   contacts: [
     {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
     {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
@@ -11,19 +13,47 @@ export class App extends Component{
     {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
   ],
   filter: '',
-  name: '',
-  number: ''
 }
 
-  addNewContact = newContact => {
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newContact]
-    }))
+  addNewContact = (newContact, { actions }) => {
+    const { contacts } = this.state;
+    const existName = contacts.map(el => el.name.toLowerCase());
+
+    return existName.includes(newContact.name.toLowerCase()) ?
+      alert(`${newContact.name} is already in contacts`):
+      this.setState(prevState => {
+        actions.resetForm();
+        return {
+          contacts: [...prevState.contacts, newContact]
+        }
+      
+      })
+    
   }
 
+  getVisibleContact = () => {
+    const { contacts, filter } = this.state;
+
+    const normalizeFilter = filter.toLocaleLowerCase();
+
+    return contacts.filter(contact =>
+      contact.name.toLocaleLowerCase().includes(normalizeFilter)
+    );
+  };
+
+  delContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(item => item.id !== id),
+    }));
+  };
+
+  changeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
 
   render() {
-
+    const getVisibleContact = this.getVisibleContact();
+    
     return (
       <div
       style={{
@@ -39,7 +69,9 @@ export class App extends Component{
           onSubmit={ this.addNewContact } />
       
         <h2>Contacts</h2>
-        <ContactsList/>
+        <Filter filter={this.state.filter} onChange={this.changeFilter} />
+        <ContactList contacts={getVisibleContact}
+          onDelete={ this.delContact } />
     </div>
     )
   }

@@ -1,25 +1,24 @@
 import React from "react";
 import { Formik } from 'formik';
 import { Form, FormLabel, Field, ErrorMessage } from "./contactsForm.styled";
-import { ContactSchema, phoneNumberMask } from "components/Utils/validate";
+import { ContactSchema} from "components/Utils/validate";
 import { nanoid } from "nanoid";
+import PropTypes from 'prop-types';
 
 export const ContactsForm = ({onSubmit}) => {
     return (
         <Formik
             initialValues={{
-                contacts: [],
                 name: '',
                 number: '',
             }}
             validationSchema={ContactSchema}
 
             onSubmit={(values, actions) => {
-                onSubmit({ ...values, id: nanoid() })
+                onSubmit({ ...values, id: nanoid() }, {actions})
                 actions.resetForm();
             }}>
             
-
 
             <Form>
                 <FormLabel>
@@ -47,4 +46,8 @@ export const ContactsForm = ({onSubmit}) => {
         </Form>
     </Formik>
     )
+}
+
+ContactsForm.propTypes = {
+    onSubmit: PropTypes.func.isRequired
 }
