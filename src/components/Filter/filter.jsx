@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+import { Div, FilterLabel, Input } from './filter.styled';
 
 const Filter = ({ filter, onChange }) => 
-    <div>
-        <p>Enter name</p>
-        <input type="text" value={filter} onChange={onChange} />
-    </div>
+    <Div>
+        <FilterLabel>Enter name:</FilterLabel>
+        <Input type="text" value={filter} onChange={onChange} />
+    </Div>
 
 export default Filter;
 

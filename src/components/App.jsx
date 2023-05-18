@@ -2,6 +2,7 @@ import { Component } from "react";
 import { ContactsForm } from "./ContactsForm/contactsForm";
 import ContactList from "./ContactsList/contactsList";
 import Filter from "./Filter/filter";
+import { Section, Title, SectionHeading } from "./GlobalStyles.styled";
 
 export class App extends Component{
 
@@ -55,24 +56,16 @@ state = {
     const getVisibleContact = this.getVisibleContact();
     
     return (
-      <div
-      style={{
-        height: '100vh',
-        // display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#010101'
-      }}
-      >
-        <h1>Phonebook</h1>
+      <Section>
+        <Title>Phonebook</Title>
         <ContactsForm
           onSubmit={ this.addNewContact } />
       
-        <h2>Contacts</h2>
+        <SectionHeading>Contacts</SectionHeading>
         <Filter filter={this.state.filter} onChange={this.changeFilter} />
         <ContactList contacts={getVisibleContact}
           onDelete={ this.delContact } />
-    </div>
+    </Section>
     )
   }
 }
